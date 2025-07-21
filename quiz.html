@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mexicayotl Academy of Excellence - Quiz</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c5530;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
+        .instructions {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #2c5530;
+        }
+        
+        .question {
+            background: #fafafa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+        
+        .question h3 {
+            color: #2c5530;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        
+        .question-type {
+            display: inline-block;
+            background: #2c5530;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin-bottom: 10px;
+        }
+        
+        label {
+            display: block;
+            margin: 8px 0;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        
+        label:hover {
+            background: #f0f8f0;
+        }
+        
+        input[type="radio"], input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        input[type="text"]:focus, textarea:focus {
+            border-color: #2c5530;
+            outline: none;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(45deg, #2c5530, #4a7c59);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+            transition: transform 0.2s;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(44, 85, 48, 0.3);
+        }
+        
+        .answer-key {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .answer-key h2 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .answer-item {
+            margin: 10px 0;
+            padding: 8px;
+            background: white;
+            border-radius: 5px;
+        }
+        
+        .score-display {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .score-excellent {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .score-good {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .score-needs-improvement {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mexicayotl Academy of Excellence</h1>
+        <p class="subtitle">Knowledge Assessment Quiz</p>
+        
+        <div class="instructions">
+            <strong>Instructions:</strong> Read each question carefully and select the best answer or fill in the blank. Click "Submit Quiz" when you're finished to see your score and the answer key.
+        </div>
+
+        <form id="quizForm">
+            <div class="question">
+                <span class="question-type">Multiple Choice</span>
+                <h3>1. When did Mexicayotl Academy of Excellence first open its doors?</h3>
+                <label><input type="radio" name="q1" value="a"> A) 1995</label>
+                <label><input type="radio" name="q1" value="b"> B) 1998</label>
+                <label><input type="radio" name="q1" value="c"> C) 2000</label>
+                <label><input type="radio" name="q1" value="d"> D) 2005</label>
+            </div>
+
+            <div class="question">
+                <span class="question-type">True/False</span>
+                <h3>2. Mexicayotl Academy provides education in only English.</h3>
+                <label><input type="radio" name="q2" value="true"> True</label>
+                <label><input type="radio" name="q2" value="false"> False</label>
+            </div>
+
+            <div class="question">
+                <span class="question-type">Fill in the Blank</span>
+                <h3>3. Mexicayotl Academy prepares scholars to excel in a _______ Language, Interconnected, Green World.</h3>
+                <input type="text" name="q3" placeholder="Your answer here...">
+            </div>
+
+            <div class="question">
+                <span class="question-type">Multiple Select</span>
+                <h3>4. What are the core values that form the foundation of education at Mexicayotl Academy? (Select all that apply)</h3>
+                <label><input type="checkbox" name="q4" value="respect"> A) Respect</label>
+                <label><input type="checkbox" name="q4" value="responsibility"> B) Responsibility</label>
+                <label><input type="checkbox" name="q4" value="self-discipline"> C) Self-discipline</label>
+                <label><input type="checkbox" name="q4" value="competition"> D) Competition</label>
+                <label><input type="checkbox" name="q4" value="achievement"> E) High academic achievement</label>
+            </div>
+
+            <div class="question">
+                <span class="question-type">Short Answer</span>
+                <h3>5. Name the two locations where Mexicayotl Academy has physical campuses.</h3>
+                <textarea name="q5" rows="3" placeholder="List both locations..."></textarea>
+            </div>
+
+            <div class="question">
+                <span class="question-type">Multiple Choice</span>
+                <h3>6. According to the school's philosophy, what role do parents play in student success?</h3>
+                <label><input type="radio" name="q6" value="a"> A) Parents should leave education entirely to teachers</label>
+                <label><input type="radio" name="q6" value="b"> B) Parents should continually show interest in their child's school and support the student</label>
+                <label><input type="radio" name="q6" value="c"> C) Parents should only be involved during parent-teacher conferences</label>
+                <label><input type="radio" name="q6" value="d"> D) Parents should focus only on homework help</label>
+            </div>
+
+            <div class="question">
+                <span class="question-type">True/False</span>
+                <h3>7. The school's educators help create critical thinkers in both English and Spanish.</h3>
+                <label><input type="radio" name="q7" value="true"> True</label>
+                <label><input type="radio" name="q7" value="false"> False</label>
+            </div>
+
+            <div class="question">
+                <span class="question-type">Fill in the Blank</span>
+                <h3>8. The school's mission is to prepare students for success in a rapidly changing world by fostering critical thinking, _______, and innovation.</h3>
+                <input type="text" name="q8" placeholder="Your answer here...">
+            </div>
+
+            <button type="button" class="submit-btn" onclick="gradeQuiz()">Submit Quiz</button>
+        </form>
+
+        <div id="scoreDisplay" class="score-display"></div>
+
+        <div id="answerKey" class="answer-key">
+            <h2>📚 Answer Key</h2>
+            <div class="answer-item"><strong>1.</strong> B) 1998 - The school opened its doors in 1998</div>
+            <div class="answer-item"><strong>2.</strong> False - Mexicayotl Academy provides dual language education</div>
+            <div class="answer-item"><strong>3.</strong> Dual - "Dual Language, Interconnected, Green World"</div>
+            <div class="answer-item"><strong>4.</strong> A, B, C, E - Respect, responsibility, self-discipline, and high academic achievement are all mentioned as core values</div>
+            <div class="answer-item"><strong>5.</strong> 667 N. 7th Ave., Tucson, AZ 85705 and 2059 N. Grand Avenue, Nogales, AZ 85621</div>
+            <div class="answer-item"><strong>6.</strong> B) Parents should continually show interest in their child's school and support the student</div>
+            <div class="answer-item"><strong>7.</strong> True - Educators help create critical thinkers in both English and Spanish</div>
+            <div class="answer-item"><strong>8.</strong> Creativity - The mission includes fostering critical thinking, creativity, and innovation</div>
+        </div>
+    </div>
+
+    <script>
+        function gradeQuiz() {
+            let score = 0;
+            let totalQuestions = 8;
+
+            // Question 1
+            if (document.querySelector('input[name="q1"]:checked')?.value === 'b') {
+                score++;
+            }
+
+            // Question 2
+            if (document.querySelector('input[name="q2"]:checked')?.value === 'false') {
+                score++;
+            }
+
+            // Question 3
+            let q3Answer = document.querySelector('input[name="q3"]').value.toLowerCase().trim();
+            if (q3Answer === 'dual') {
+                score++;
+            }
+
+            // Question 4
+            let q4Checked = Array.from(document.querySelectorAll('input[name="q4"]:checked')).map(input => input.value);
+            let q4Correct = ['respect', 'responsibility', 'self-discipline', 'achievement'];
+            if (q4Checked.length === 4 && q4Correct.every(val => q4Checked.includes(val)) && !q4Checked.includes('competition')) {
+                score++;
+            }
+
+            // Question 5
+            let q5Answer = document.querySelector('textarea[name="q5"]').value.toLowerCase();
+            if (q5Answer.includes('tucson') && q5Answer.includes('nogales')) {
+                score++;
+            }
+
+            // Question 6
+            if (document.querySelector('input[name="q6"]:checked')?.value === 'b') {
+                score++;
+            }
+
+            // Question 7
+            if (document.querySelector('input[name="q7"]:checked')?.value === 'true') {
+                score++;
+            }
+
+            // Question 8
+            let q8Answer = document.querySelector('input[name="q8"]').value.toLowerCase().trim();
+            if (q8Answer === 'creativity') {
+                score++;
+            }
+
+            // Display score
+            let percentage = Math.round((score / totalQuestions) * 100);
+            let scoreDisplay = document.getElementById('scoreDisplay');
+            let scoreClass = '';
+            let message = '';
+
+            if (percentage >= 90) {
+                scoreClass = 'score-excellent';
+                message = '🌟 Excellent work!';
+            } else if (percentage >= 70) {
+                scoreClass = 'score-good';
+                message = '👍 Good job!';
+            } else {
+                scoreClass = 'score-needs-improvement';
+                message = '📚 Keep studying!';
+            }
+
+            scoreDisplay.className = `score-display ${scoreClass}`;
+            scoreDisplay.innerHTML = `${message}<br>Your Score: ${score}/${totalQuestions} (${percentage}%)`;
+            scoreDisplay.style.display = 'block';
+
+            // Show answer key
+            document.getElementById('answerKey').style.display = 'block';
+
+            // Scroll to results
+            scoreDisplay.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
