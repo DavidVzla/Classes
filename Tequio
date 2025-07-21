@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorando el Tequio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Mexica Nocturne -->
+    <!-- Application Structure Plan: The SPA is designed as an educational journey for students. It starts with a high-level introduction (¿Qué es el Tequio?), then dives into the core principles using interactive cards ("Los Pilares del Tequio") to encourage active learning. This is followed by concrete, categorized examples ("Tequio en Acción") to make the concept tangible. A historical timeline ("Tequio a Través del Tiempo") provides essential context, showing its evolution. Finally, a short, interactive quiz ("Pon a Prueba tu Conocimiento") allows students to self-assess their understanding. A new "Pregunta al Sabio" section has been added to allow open-ended questions powered by an AI. This modular, interactive structure was chosen over a linear format to be more engaging and to break down a complex socio-cultural concept into digestible, explorable themes, fostering better comprehension and retention. -->
+    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation Method -> Interaction -> Justification -> Library/Method. 1. Core Principles -> Organize/Inform -> Interactive Cards -> Click to reveal text -> Encourages active user participation over passive reading -> HTML/CSS/JS. 2. Examples -> Inform/Organize -> Thematic Grid with Icons -> Hover/Click for emphasis -> Visually separates different applications of tequio for clarity -> HTML/Tailwind/Unicode. 3. Historical Evolution -> Show Change -> Vertical Timeline Diagram -> N/A -> Clearly illustrates the transformation of the concept from pre-hispanic times to today -> HTML/Tailwind. 4. Knowledge Check -> Assess -> Interactive Quiz -> User selection and button click -> Provides immediate feedback and reinforces learning -> HTML/JS. 5. Ask the Wise One -> Inform/Explore -> Text Input, Button, Text Output -> User input, AI generation -> Provides dynamic, open-ended learning beyond predefined content -> Gemini API. Chart.js was considered, but the qualitative nature of the information makes a quantitative chart inappropriate and potentially misleading. The chosen interactive diagrams and text blocks are better suited for conveying these cultural concepts. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        :root {
+            --bg-color: #FFFFFF;
+            --text-color: #0D0D0D;
+            --primary-blue: #0A3D62;
+            --secondary-blue: #0C7489;
+            --accent-blue-light: #E0F7FA;
+            --border-color: #B0BEC5;
+        }
+        .bg-main { background-color: var(--bg-color); }
+        .text-main { color: var(--text-color); }
+        .bg-primary { background-color: var(--primary-blue); }
+        .text-primary { color: var(--primary-blue); }
+        .bg-secondary { background-color: var(--secondary-blue); }
+        .text-secondary { color: var(--secondary-blue); }
+        .bg-accent-light { background-color: var(--accent-blue-light); }
+        .border-custom { border-color: var(--border-color); }
+        .pillar-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .pillar-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .pillar-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+            padding: 0 1.5rem;
+        }
+        .pillar-content.active {
+            max-height: 500px;
+            padding: 1rem 1.5rem 1.5rem;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--bg-color);
+            border: 4px solid var(--primary-blue);
+        }
+        .quiz-option.selected {
+            background-color: var(--accent-blue-light);
+            border-color: var(--secondary-blue);
+        }
+        .quiz-option.correct {
+            background-color: #D4EDDA;
+            border-color: #28A745;
+        }
+        .quiz-option.incorrect {
+            background-color: #F8D7DA;
+            border-color: #DC3545;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary-blue);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-main text-main">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Header Section -->
+        <header class="text-center py-10 rounded-lg bg-accent-light">
+            <h1 class="text-4xl md:text-6xl font-bold text-primary tracking-tight">Explorando el Tequio</h1>
+            <p class="mt-4 text-lg md:text-xl text-secondary max-w-3xl mx-auto">Una herramienta interactiva para entender el corazón del trabajo comunitario en la cultura Mexica.</p>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="sticky top-0 z-10 bg-white/80 backdrop-blur-md shadow-sm my-8 rounded-full">
+            <ul class="flex items-center justify-center p-3 space-x-4 md:space-x-8 overflow-x-auto">
+                <li><a href="#que-es" class="text-sm md:text-base font-semibold text-primary hover:text-secondary transition">¿Qué es?</a></li>
+                <li><a href="#pilares" class="text-sm md:text-base font-semibold text-primary hover:text-secondary transition">Pilares</a></li>
+                <li><a href="#en-accion" class="text-sm md:text-base font-semibold text-primary hover:text-secondary transition">En Acción</a></li>
+                <li><a href="#historia" class="text-sm md:text-base font-semibold text-primary hover:text-secondary transition">Historia</a></li>
+                <li><a href="#quiz" class="text-sm md:text-base font-semibold text-primary hover:text-secondary transition">Quiz</a></li>
+                <li><a href="#pregunta-sabio" class="text-sm md:text-base font-semibold text-primary hover:text-secondary transition">✨ Pregunta al Sabio ✨</a></li>
+            </ul>
+        </nav>
+
+        <!-- Section: What is Tequio? -->
+        <section id="que-es" class="my-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-primary text-center">¿Qué es el Tequio?</h2>
+            <div class="mt-6 max-w-4xl mx-auto text-center text-lg text-gray-700 space-y-4 leading-relaxed">
+                <p>El Tequio es una de las instituciones sociales más importantes de las culturas originarias de México, incluyendo la Mexica. La palabra proviene del náhuatl <span class="font-semibold text-secondary">"tequitl"</span>, que significa "trabajo" o "tributo". Fundamentalmente, es una forma de trabajo colectivo, obligatorio y no remunerado que cada miembro de la comunidad debe aportar para el beneficio de todos.</p>
+                <p>No se trata solo de construir algo físico, sino de tejer y fortalecer los lazos sociales. Participar en el tequio es un honor y una responsabilidad cívica que define la pertenencia y el compromiso con la comunidad. A través de este esfuerzo compartido, se construían desde templos y calzadas hasta el espíritu de cooperación que sostenía a la sociedad.</p>
+            </div>
+        </section>
+
+        <!-- Section: Pillars of Tequio -->
+        <section id="pilares" class="my-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-primary text-center">Los Pilares del Tequio</h2>
+            <p class="text-lg text-gray-700 text-center mt-4 max-w-3xl mx-auto">El Tequio se sostiene sobre principios fundamentales que guían su práctica. Haz clic en cada pilar para descubrir su significado y su importancia dentro de la cosmovisión Mexica.</p>
+            <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <div class="pillar-card bg-white border border-custom rounded-lg cursor-pointer" data-pillar="pilar1">
+                    <div class="p-6 flex items-center justify-between">
+                        <h3 class="text-2xl font-bold text-primary">Colectivo</h3>
+                        <span class="text-3xl text-secondary">👥</span>
+                    </div>
+                    <div id="pilar1" class="pillar-content text-gray-700">
+                        <p>El trabajo es para y por la comunidad. No beneficia a un solo individuo, sino al grupo entero. Este principio refuerza la idea de que el bienestar de la comunidad es responsabilidad de todos sus miembros, promoviendo la unidad y la solidaridad.</p>
+                    </div>
+                </div>
+
+                <div class="pillar-card bg-white border border-custom rounded-lg cursor-pointer" data-pillar="pilar2">
+                    <div class="p-6 flex items-center justify-between">
+                        <h3 class="text-2xl font-bold text-primary">Obligatorio</h3>
+                         <span class="text-3xl text-secondary">⚖️</span>
+                    </div>
+                    <div id="pilar2" class="pillar-content text-gray-700">
+                        <p>Aportar tequio no es una opción, sino un deber cívico y moral. Todos los miembros capaces de la comunidad deben participar. Esta obligatoriedad asegura la mano de obra necesaria para los grandes proyectos y garantiza una distribución equitativa del esfuerzo.</p>
+                    </div>
+                </div>
+
+                <div class="pillar-card bg-white border border-custom rounded-lg cursor-pointer" data-pillar="pilar3">
+                    <div class="p-6 flex items-center justify-between">
+                        <h3 class="text-2xl font-bold text-primary">Recíproco</h3>
+                         <span class="text-3xl text-secondary">🔄</span>
+                    </div>
+                    <div id="pilar3" class="pillar-content text-gray-700">
+                        <p>Así como uno da su trabajo a la comunidad, también recibe los beneficios del trabajo de los demás. Es un ciclo de dar y recibir que construye confianza y redes de apoyo mutuo, esenciales para la supervivencia y prosperidad del grupo.</p>
+                    </div>
+                </div>
+
+                <div class="pillar-card bg-white border border-custom rounded-lg cursor-pointer" data-pillar="pilar4">
+                    <div class="p-6 flex items-center justify-between">
+                        <h3 class="text-2xl font-bold text-primary">Honorífico</h3>
+                         <span class="text-3xl text-secondary">🎖️</span>
+                    </div>
+                    <div id="pilar4" class="pillar-content text-gray-700">
+                        <p>Cumplir con el tequio otorga prestigio y respeto dentro de la comunidad. Es una demostración pública de compromiso y valía. De hecho, haber cumplido con los tequios era a menudo un requisito para poder acceder a cargos de mayor responsabilidad o liderazgo.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section: Tequio in Action -->
+        <section id="en-accion" class="my-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-primary text-center">Tequio en Acción</h2>
+            <p class="text-lg text-gray-700 text-center mt-4 max-w-3xl mx-auto">El tequio no era un concepto abstracto, sino una práctica diaria que moldeaba el entorno y la vida social. Aquí vemos algunos ejemplos de cómo se manifestaba en la sociedad Mexica.</p>
+            <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="bg-accent-light p-8 rounded-lg">
+                    <div class="text-5xl mb-4">🏗️</div>
+                    <h3 class="text-xl font-bold text-primary mb-2">Construcción y Mantenimiento</h3>
+                    <p class="text-gray-700">Creación y reparación de calzadas, templos, acueductos y canales (chinampas). La majestuosidad de ciudades como Tenochtitlan fue posible gracias al tequio de miles de personas.</p>
+                </div>
+                <div class="bg-accent-light p-8 rounded-lg">
+                    <div class="text-5xl mb-4">🎉</div>
+                    <h3 class="text-xl font-bold text-primary mb-2">Organización de Festividades</h3>
+                    <p class="text-gray-700">Las ceremonias y fiestas requerían una gran cooperación: desde la preparación de alimentos y la elaboración de adornos, hasta la participación en danzas y rituales colectivos.</p>
+                </div>
+                <div class="bg-accent-light p-8 rounded-lg">
+                    <div class="text-5xl mb-4">🌱</div>
+                    <h3 class="text-xl font-bold text-primary mb-2">Labores Agrícolas y de Apoyo</h3>
+                    <p class="text-gray-700">Aunque cada familia trabajaba su tierra, en tiempos de siembra o cosecha, la comunidad podía organizarse para ayudarse mutuamente, asegurando el alimento para todos.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Timeline -->
+        <section id="historia" class="my-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-primary text-center">Tequio a Través del Tiempo</h2>
+             <p class="text-lg text-gray-700 text-center mt-4 max-w-3xl mx-auto">El concepto de Tequio ha evolucionado a lo largo de la historia, adaptándose a diferentes contextos sociales y políticos, pero manteniendo su esencia de trabajo comunitario.</p>
+            <div class="mt-12 max-w-2xl mx-auto">
+                <div class="relative pl-8 border-l-4 border-primary">
+                    
+                    <div class="mb-12 relative timeline-item">
+                        <h3 class="text-2xl font-bold text-secondary">Época Prehispánica</h3>
+                        <p class="mt-2 text-gray-700">El tequio es la base del desarrollo de las grandes civilizaciones. Es un sistema de organización social y laboral que permite la construcción de obras monumentales y fortalece la cohesión del imperio Mexica.</p>
+                    </div>
+
+                    <div class="mb-12 relative timeline-item">
+                        <h3 class="text-2xl font-bold text-secondary">Época Colonial</h3>
+                        <p class="mt-2 text-gray-700">Los conquistadores españoles se apropian de la estructura del tequio. Lo transforman en una forma de tributo forzado y explotación de la mano de obra indígena para sus propios proyectos, perdiendo su sentido original de reciprocidad.</p>
+                    </div>
+
+                    <div class="relative timeline-item">
+                        <h3 class="text-2xl font-bold text-secondary">Pervivencia Actual</h3>
+                        <p class="mt-2 text-gray-700">En muchas comunidades indígenas de México, especialmente en Oaxaca, el tequio sobrevive como una práctica viva y un pilar de su autonomía y sistema de "usos y costumbres". Es un acto de resistencia cultural y auto-gobierno.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Quiz -->
+        <section id="quiz" class="my-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-primary text-center">Pon a Prueba tu Conocimiento</h2>
+            <p class="text-lg text-gray-700 text-center mt-4 max-w-3xl mx-auto">Después de explorar los diferentes elementos del Tequio, responde estas preguntas para consolidar lo que has aprendido.</p>
+            <div id="quiz-container" class="mt-10 max-w-3xl mx-auto bg-white p-8 rounded-xl border border-custom space-y-8">
+                
+                <div class="quiz-question">
+                    <p class="font-bold text-lg mb-4">1. ¿Qué significa la palabra náhuatl "tequitl", de la que deriva "Tequio"?</p>
+                    <div class="space-y-3">
+                        <label class="quiz-option block p-4 border-2 border-custom rounded-lg cursor-pointer transition">
+                            <input type="radio" name="q1" value="incorrect" class="hidden"> Fiesta o celebración
+                        </label>
+                        <label class="quiz-option block p-4 border-2 border-custom rounded-lg cursor-pointer transition">
+                            <input type="radio" name="q1" value="correct" class="hidden"> Trabajo o tributo
+                        </label>
+                        <label class="quiz-option block p-4 border-2 border-custom rounded-lg cursor-pointer transition">
+                            <input type="radio" name="q1" value="incorrect" class="hidden"> Familia o comunidad
+                        </label>
+                    </div>
+                </div>
+
+                <div class="quiz-question">
+                    <p class="font-bold text-lg mb-4">2. ¿Cuál de los siguientes NO es un pilar fundamental del Tequio?</p>
+                    <div class="space-y-3">
+                        <label class="quiz-option block p-4 border-2 border-custom rounded-lg cursor-pointer transition">
+                            <input type="radio" name="q2" value="incorrect" class="hidden"> Ser obligatorio
+                        </label>
+                        <label class="quiz-option block p-4 border-2 border-custom rounded-lg cursor-pointer transition">
+                            <input type="radio" name="q2" value="incorrect" class="hidden"> Ser recíproco
+                        </label>
+                        <label class="quiz-option block p-4 border-2 border-custom rounded-lg cursor-pointer transition">
+                            <input type="radio" name="q2" value="correct" class="hidden"> Ser voluntario y pagado
+                        </label>
+                    </div>
+                </div>
+                 <div class="quiz-question">
+                    <p class="font-bold text-lg mb-4">3. ¿Cómo cambió el Tequio durante la época colonial?</p>
+                    <div class="space-y-3">
+                        <label class="quiz-option block p-4 border-2 border-custom rounded-lg cursor-pointer transition">
+                            <input type="radio" name="q3" value="correct" class="hidden"> Se convirtió en una forma de trabajo forzado para los españoles.
+                        </label>
+                        <label class="quiz-option block p-4 border-2 border-custom rounded-lg cursor-pointer transition">
+                            <input type="radio" name="q3" value="incorrect" class="hidden"> Desapareció por completo.
+                        </label>
+                        <label class="quiz-option block p-4 border-2 border-custom rounded-lg cursor-pointer transition">
+                            <input type="radio" name="q3" value="incorrect" class="hidden"> Se hizo más popular y justo para los indígenas.
+                        </label>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button id="check-quiz-btn" class="bg-primary text-white font-bold py-3 px-8 rounded-full hover:bg-secondary transition-colors text-lg">Revisar Respuestas</button>
+                    <div id="quiz-results" class="mt-6 text-xl font-bold"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Ask the Wise One -->
+        <section id="pregunta-sabio" class="my-16 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-primary text-center">✨ Pregunta al Sabio ✨</h2>
+            <p class="text-lg text-gray-700 text-center mt-4 max-w-3xl mx-auto">¿Tienes más preguntas sobre el Tequio o la cultura Mexica? El sabio te ayudará a encontrar respuestas.</p>
+            <div class="mt-10 max-w-3xl mx-auto bg-white p-8 rounded-xl border border-custom space-y-6">
+                <textarea id="user-question" class="w-full p-4 border-2 border-custom rounded-lg focus:outline-none focus:border-secondary resize-y" rows="4" placeholder="Escribe tu pregunta aquí..."></textarea>
+                <div class="text-center">
+                    <button id="ask-sabio-btn" class="bg-primary text-white font-bold py-3 px-8 rounded-full hover:bg-secondary transition-colors text-lg flex items-center justify-center mx-auto">
+                        <span id="button-text">Preguntar al Sabio</span>
+                        <div id="loading-spinner" class="spinner ml-3 hidden"></div>
+                    </button>
+                </div>
+                <div id="sabio-response" class="mt-6 p-4 bg-accent-light rounded-lg text-gray-800 leading-relaxed min-h-[80px] flex items-center justify-center text-center">
+                    <p class="text-gray-600">Tu respuesta aparecerá aquí.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center py-8 mt-12 border-t border-custom">
+            <p class="text-gray-600">Herramienta educativa creada para la exploración de la cultura Mexica.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Pillar card interaction
+            const pillarCards = document.querySelectorAll('.pillar-card');
+            pillarCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const contentId = card.dataset.pillar;
+                    const contentElement = document.getElementById(contentId);
+                    
+                    // Close other pillars
+                    document.querySelectorAll('.pillar-content.active').forEach(activeContent => {
+                        if (activeContent.id !== contentId) {
+                            activeContent.classList.remove('active');
+                        }
+                    });
+
+                    contentElement.classList.toggle('active');
+                });
+            });
+
+            // Smooth scrolling for navigation
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+            
+            // Quiz interaction
+            const quizOptions = document.querySelectorAll('.quiz-option');
+            quizOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    const questionName = option.querySelector('input').name;
+                    document.querySelectorAll(`input[name="${questionName}"]`).forEach(radio => {
+                        radio.parentElement.classList.remove('selected');
+                    });
+                    option.classList.add('selected');
+                });
+            });
+
+            const checkQuizBtn = document.getElementById('check-quiz-btn');
+            checkQuizBtn.addEventListener('click', () => {
+                const questions = document.querySelectorAll('.quiz-question');
+                let score = 0;
+                
+                questions.forEach((question, index) => {
+                    const selectedRadio = question.querySelector(`input[name="q${index+1}"]:checked`);
+                    const options = question.querySelectorAll('.quiz-option');
+
+                    options.forEach(opt => {
+                        opt.classList.remove('correct', 'incorrect', 'selected');
+                        const input = opt.querySelector('input');
+                        if (input.value === 'correct') {
+                           opt.classList.add('correct');
+                        }
+                    });
+
+                    if (selectedRadio) {
+                        if (selectedRadio.value === 'correct') {
+                            score++;
+                        } else {
+                            selectedRadio.parentElement.classList.remove('correct');
+                            selectedRadio.parentElement.classList.add('incorrect');
+                        }
+                    }
+                });
+
+                const resultsContainer = document.getElementById('quiz-results');
+                resultsContainer.textContent = `Obtuviste ${score} de ${questions.length} respuestas correctas.`;
+                resultsContainer.classList.add(score / questions.length > 0.5 ? 'text-green-600' : 'text-red-600');
+            });
+
+            // Gemini API integration for "Ask the Wise One"
+            const userQuestionInput = document.getElementById('user-question');
+            const askSabioBtn = document.getElementById('ask-sabio-btn');
+            const sabioResponseDiv = document.getElementById('sabio-response');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const buttonText = document.getElementById('button-text');
+
+            askSabioBtn.addEventListener('click', async () => {
+                const prompt = userQuestionInput.value.trim();
+                if (!prompt) {
+                    sabioResponseDiv.innerHTML = '<p class="text-red-500">Por favor, escribe tu pregunta.</p>';
+                    return;
+                }
+
+                buttonText.textContent = 'Pensando...';
+                loadingSpinner.classList.remove('hidden');
+                askSabioBtn.disabled = true;
+                sabioResponseDiv.innerHTML = '<p class="text-gray-600">El sabio está consultando los códices...</p>';
+
+                try {
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: `Actúa como un experto en la cultura Mexica y el concepto de Tequio. Responde de manera concisa y educativa a la siguiente pregunta: "${prompt}"` }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = ""; // API key will be provided by Canvas runtime
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json();
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        sabioResponseDiv.innerHTML = `<p>${text}</p>`;
+                    } else {
+                        sabioResponseDiv.innerHTML = '<p class="text-red-500">Lo siento, el sabio no pudo encontrar una respuesta en este momento. Intenta de nuevo.</p>';
+                    }
+                } catch (error) {
+                    console.error('Error calling Gemini API:', error);
+                    sabioResponseDiv.innerHTML = '<p class="text-red-500">Hubo un error al conectar con el sabio. Por favor, revisa tu conexión o inténtalo más tarde.</p>';
+                } finally {
+                    buttonText.textContent = 'Preguntar al Sabio';
+                    loadingSpinner.classList.add('hidden');
+                    askSabioBtn.disabled = false;
+                    userQuestionInput.value = ''; // Clear input after response
+                }
+            });
+        });
+    </script>
+</body>
+</html>
