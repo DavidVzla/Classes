@@ -286,4 +286,263 @@
             // --- DATA ---
             const avatars = ["🐶", "🐱", "🦊", "🐵", "🐸"];
             const verbs = [
-                { base: "run", present: "run", past: "ran
+                { base: "run", present: "run", past: "ran", presentProgressive: "running" },
+                { base: "eat", present: "eat", past: "ate", presentProgressive: "eating" },
+                { base: "play", present: "play", past: "played", presentProgressive: "playing" },
+                { base: "write", present: "write", past: "wrote", presentProgressive: "writing" },
+                { base: "swim", present: "swim", past: "swam", presentProgressive: "swimming" },
+                { base: "read", present: "read", past: "read", presentProgressive: "reading" },
+                { base: "jump", present: "jump", past: "jumped", presentProgressive: "jumping" },
+                { base: "dance", present: "dance", past: "danced", presentProgressive: "dancing" },
+                { base: "sing", present: "sing", past: "sang", presentProgressive: "singing" },
+                { base: "drink", present: "drink", past: "drank", presentProgressive: "drinking" }
+            ];
+            const sentences = [
+                { sentence: "I ___ to school every day. (walk)", answer: "walk" },
+                { sentence: "She is ___ her homework. (do)", answer: "doing" },
+                { sentence: "They ___ a movie last night. (watch)", answer: "watched" },
+                { sentence: "He ___ a book right now. (read)", answer: "reading"},
+                { sentence: "We ___ pizza yesterday. (eat)", answer: "ate"}
+            ];
+            const listeningOptions = {
+                easy: [
+                    { question: "I like to swim.", options: ["I like to swim.", "I like to eat.", "I like to run."], answer: "I like to swim." },
+                    { question: "She is running.", options: ["She is running.", "She is eating.", "She is reading."], answer: "She is running." }
+                ],
+                medium: [
+                    { question: "They are playing outside.", options: ["They are playing outside.", "They are reading books.", "They are eating lunch."], answer: "They are playing outside." },
+                    { question: "He swam at the pool.", options: ["He wrote a letter.", "He swam at the pool.", "He drank some water."], answer: "He swam at the pool."}
+                ],
+                hard: [
+                    { question: "He wrote a letter to his friend.", options: ["He wrote a letter to his friend.", "He read a book.", "He swam at the pool."], answer: "He wrote a letter to his friend." },
+                    { question: "She was dancing at the party last night.", options: ["She will dance at the party.", "She is dancing at the party.", "She was dancing at the party last night."], answer: "She was dancing at the party last night."}
+                ]
+            };
+
+            // --- STATE VARIABLES ---
+            let score = 0;
+            let level = 1;
+            let badge = "";
+            let currentVerb = null;
+            let avatar = avatars[0];
+            let timeLeft = 30;
+            let timerInterval = null;
+            let sentenceIndex = 0;
+            let difficulty = 'easy';
+            let listeningIndex = 0;
+
+            // --- DOM ELEMENTS ---
+            const timeLeftEl = document.getElementById('time-left');
+            const avatarEl = document.getElementById('avatar');
+            const levelDisplayEl = document.getElementById('level-display');
+            const badgeDisplayEl = document.getElementById('badge-display');
+            const baseVerbEl = document.getElementById('base-verb');
+            const presentInput = document.getElementById('present-input');
+            const pastInput = document.getElementById('past-input');
+            const progressiveInput = document.getElementById('progressive-input');
+            const gameFeedbackEl = document.getElementById('game-feedback');
+            const sentenceTextEl = document.getElementById('sentence-text');
+            const sentenceInput = document.getElementById('sentence-input');
+            const sentenceFeedbackEl = document.getElementById('sentence-feedback');
+            const difficultySelect = document.getElementById('difficulty-select');
+            const listeningOptionsContainer = document.getElementById('listening-options');
+            const listeningFeedbackEl = document.getElementById('listening-feedback');
+            
+            // --- UI UPDATE FUNCTIONS ---
+            function updateHeader() {
+                avatarEl.textContent = avatar;
+                levelDisplayEl.textContent = level;
+                badgeDisplayEl.textContent = badge;
+            }
+
+            function updateFeedback(element, message, isCorrect) {
+                element.textContent = message;
+                element.style.color = isCorrect ? 'var(--color-success)' : 'var(--color-danger)';
+            }
+
+            // --- GAME LOGIC FUNCTIONS ---
+            function getRandomVerb() {
+                currentVerb = verbs[Math.floor(Math.random() * verbs.length)];
+                baseVerbEl.textContent = currentVerb.base;
+                
+                // Reset inputs and feedback
+                presentInput.value = '';
+                pastInput.value = '';
+                progressiveInput.value = '';
+                gameFeedbackEl.textContent = '';
+                
+                // Reset and start timer
+                resetTimer();
+            }
+            
+            function checkAnswers() {
+                if (!currentVerb) return;
+                let correct = 0;
+                if (presentInput.value.trim().toLowerCase() === currentVerb.present) correct++;
+                if (pastInput.value.trim().toLowerCase() === currentVerb.past) correct++;
+                if (progressiveInput.value.trim().toLowerCase() === currentVerb.presentProgressive) correct++;
+                
+                const newScore = score + correct;
+                const newLevel = Math.floor(newScore / 10) + 1;
+                
+                if (newLevel > level) {
+                    level = newLevel;
+                    badge = `🏅 Level ${newLevel}`;
+                }
+                score = newScore;
+                
+                if (correct === 3) {
+                    avatar = avatars[Math.floor(Math.random() * avatars.length)];
+                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                    // const audio = new Audio("/sounds/success.mp3"); // Assuming sound file exists
+                    // audio.play();
+                }
+                
+                updateHeader();
+                updateFeedback(gameFeedbackEl, `You got ${correct} out of 3 correct!`, correct > 0);
+                clearInterval(timerInterval); // Stop timer after checking
+            }
+
+            function loadSentence() {
+                const currentSentence = sentences[sentenceIndex];
+                sentenceTextEl.textContent = currentSentence.sentence;
+                sentenceInput.value = '';
+                sentenceFeedbackEl.textContent = '';
+            }
+
+            function checkSentence() {
+                const currentSentence = sentences[sentenceIndex];
+                const isCorrect = sentenceInput.value.trim().toLowerCase() === currentSentence.answer;
+                
+                if (isCorrect) {
+                    score++;
+                    updateFeedback(sentenceFeedbackEl, "✅ Correct!", true);
+                    updateHeader();
+                    // Move to next sentence after a short delay
+                    setTimeout(() => {
+                        sentenceIndex = (sentenceIndex + 1) % sentences.length;
+                        loadSentence();
+                    }, 1500);
+                } else {
+                    updateFeedback(sentenceFeedbackEl, "❌ Try again.", false);
+                }
+            }
+
+            function loadListeningQuestion() {
+                const currentListening = listeningOptions[difficulty][listeningIndex];
+                listeningOptionsContainer.innerHTML = ''; // Clear previous options
+                
+                currentListening.options.forEach(opt => {
+                    const button = document.createElement('button');
+                    button.textContent = opt;
+                    button.className = 'btn btn-outline';
+                    button.onclick = () => handleListeningAnswer(opt);
+                    listeningOptionsContainer.appendChild(button);
+                });
+                
+                listeningFeedbackEl.textContent = '';
+            }
+
+            function handleListeningAnswer(option) {
+                const currentListening = listeningOptions[difficulty][listeningIndex];
+                const isCorrect = option === currentListening.answer;
+                
+                if (isCorrect) {
+                    score++;
+                    updateFeedback(listeningFeedbackEl, "✅ Correct!", true);
+                    updateHeader();
+                } else {
+                    updateFeedback(listeningFeedbackEl, "❌ Try again.", false);
+                }
+                
+                // Move to the next question
+                setTimeout(() => {
+                   listeningIndex = (listeningIndex + 1) % listeningOptions[difficulty].length;
+                   loadListeningQuestion();
+                }, 1500);
+            }
+
+            function playListening() {
+                const currentListening = listeningOptions[difficulty][listeningIndex];
+                if (!currentListening) return;
+                const utterance = new SpeechSynthesisUtterance(currentListening.question);
+                speechSynthesis.speak(utterance);
+            }
+            
+            function resetTimer() {
+                clearInterval(timerInterval);
+                timeLeft = 30;
+                timeLeftEl.textContent = `${timeLeft}s`;
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    timeLeftEl.textContent = `${timeLeft}s`;
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        timeLeftEl.textContent = "Time's up!";
+                        // Optionally auto-check or disable inputs
+                    }
+                }, 1000);
+            }
+
+            // --- EVENT LISTENERS ---
+            function setupEventListeners() {
+                // Tab switching
+                document.querySelectorAll('.tab-trigger').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const tabId = button.dataset.tab;
+                        
+                        document.querySelectorAll('.tab-trigger').forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        
+                        document.querySelectorAll('.tab-content').forEach(content => {
+                            content.classList.remove('active');
+                            if (content.id === `tab-content-${tabId}`) {
+                                content.classList.add('active');
+                            }
+                        });
+
+                        // Reset UI elements when switching to a new tab
+                        if (tabId === 'game') getRandomVerb();
+                        if (tabId === 'sentences') loadSentence();
+                        if (tabId === 'listening') loadListeningQuestion();
+                    });
+                });
+
+                // Game buttons
+                document.getElementById('check-answers-btn').addEventListener('click', checkAnswers);
+                document.getElementById('next-verb-btn').addEventListener('click', getRandomVerb);
+
+                // Sentence button
+                document.getElementById('check-sentence-btn').addEventListener('click', checkSentence);
+                sentenceInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') checkSentence();
+                });
+
+                // Listening controls
+                document.getElementById('play-listening-btn').addEventListener('click', playListening);
+                difficultySelect.addEventListener('change', (e) => {
+                    difficulty = e.target.value;
+                    listeningIndex = 0; // Reset index on difficulty change
+                    loadListeningQuestion();
+                });
+            }
+
+            // --- INITIALIZATION ---
+            function init() {
+                updateHeader();
+                setupEventListeners();
+                
+                // Load the first view for each tab
+                getRandomVerb();
+                loadSentence();
+                loadListeningQuestion();
+
+                // Show the default tab (Learn)
+                document.querySelector('.tab-trigger[data-tab="learn"]').click();
+            }
+
+            init();
+        });
+    </script>
+</body>
+</html
