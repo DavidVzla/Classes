@@ -1,0 +1,169 @@
+// Full simulator with listening section, multiple-choice, and difficulty levels
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { motion } from "framer-motion";
+import confetti from "canvas-confetti";
+
+const avatars = ["🐶", "🐱", "🦊", "🐵", "🐸"];
+
+const verbs = [
+  { base: "run", present: "run", past: "ran", presentProgressive: "running" },
+  { base: "eat", present: "eat", past: "ate", presentProgressive: "eating" },
+  { base: "play", present: "play", past: "played", presentProgressive: "playing" },
+  { base: "write", present: "write", past: "wrote", presentProgressive: "writing" },
+  { base: "swim", present: "swim", past: "swam", presentProgressive: "swimming" },
+  { base: "read", present: "read", past: "read", presentProgressive: "reading" },
+  { base: "jump", present: "jump", past: "jumped", presentProgressive: "jumping" },
+  { base: "dance", present: "dance", past: "danced", presentProgressive: "dancing" },
+  { base: "sing", present: "sing", past: "sang", presentProgressive: "singing" },
+  { base: "drink", present: "drink", past: "drank", presentProgressive: "drinking" }
+];
+
+const sentences = [
+  { sentence: "I ___ to school every day.", verb: "walk", answer: "walk" },
+  { sentence: "She is ___ her homework.", verb: "do", answer: "doing" },
+  { sentence: "They ___ a movie last night.", verb: "watch", answer: "watched" }
+];
+
+const listeningOptions = {
+  easy: [
+    { question: "I like to swim.", options: ["I like to swim.", "I like to eat.", "I like to run."], answer: "I like to swim." },
+    { question: "She is running.", options: ["She is running.", "She is eating.", "She is reading."], answer: "She is running." }
+  ],
+  medium: [
+    { question: "They are playing outside.", options: ["They are playing outside.", "They are reading books.", "They are eating lunch."], answer: "They are playing outside." }
+  ],
+  hard: [
+    { question: "He wrote a letter to his friend.", options: ["He wrote a letter to his friend.", "He read a book.", "He swam at the pool."], answer: "He wrote a letter to his friend." }
+  ]
+};
+
+export default function VerbTenseSimulator() {
+  const [score, setScore] = useState(0);
+  const [level, setLevel] = useState(1);
+  const [badge, setBadge] = useState("");
+  const [currentVerb, setCurrentVerb] = useState(verbs[0]);
+  const [userInput, setUserInput] = useState({ present: "", past: "", progressive: "" });
+  const [feedback, setFeedback] = useState("");
+  const [avatar, setAvatar] = useState(avatars[0]);
+  const [timeLeft, setTimeLeft] = useState(30);
+  const [sentenceIndex, setSentenceIndex] = useState(0);
+  const [sentenceInput, setSentenceInput] = useState("");
+  const [difficulty, setDifficulty] = useState("easy");
+  const [listeningIndex, setListeningIndex] = useState(0);
+  const currentSentence = sentences[sentenceIndex];
+  const currentListening = listeningOptions[difficulty][listeningIndex];
+
+  useEffect(() => {
+    if (feedback.includes("3 out of 3")) {
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      const audio = new Audio("/sounds/success.mp3");
+      audio.play();
+    }
+  }, [feedback]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const getRandomVerb = () => {
+    const random = verbs[Math.floor(Math.random() * verbs.length)];
+    setCurrentVerb(random);
+    setUserInput({ present: "", past: "", progressive: "" });
+    setFeedback("");
+    setTimeLeft(30);
+  };
+
+  const checkAnswers = () => {
+    let correct = 0;
+    if (userInput.present.toLowerCase() === currentVerb.present) correct++;
+    if (userInput.past.toLowerCase() === currentVerb.past) correct++;
+    if (userInput.progressive.toLowerCase() === currentVerb.presentProgressive) correct++;
+    setScore(prev => {
+      const newScore = prev + correct;
+      const newLevel = Math.floor(newScore / 10) + 1;
+      if (newLevel > level) {
+        setLevel(newLevel);
+        setBadge(`🏅 Level ${newLevel}`);
+      }
+      return newScore;
+    });
+    if (correct === 3) {
+      const newAvatar = avatars[Math.floor(Math.random() * avatars.length)];
+      setAvatar(newAvatar);
+    }
+    setFeedback(`You got ${correct} out of 3 correct!`);
+  };
+
+  const checkSentence = () => {
+    if (sentenceInput.trim().toLowerCase() === currentSentence.answer) {
+      setFeedback("✅ Correct!");
+      setScore(prev => prev + 1);
+    } else {
+      setFeedback("❌ Try again.");
+    }
+    setSentenceInput("");
+    setSentenceIndex((prev) => (prev + 1) % sentences.length);
+  };
+
+  const handleListeningAnswer = (option) => {
+    const isCorrect = option === currentListening.answer;
+    setFeedback(isCorrect ? "✅ Correct!" : "❌ Try again.");
+    if (isCorrect) setScore((prev) => prev + 1);
+    setListeningIndex((prev) => (prev + 1) % listeningOptions[difficulty].length);
+  };
+
+  const playListening = () => {
+    const utterance = new SpeechSynthesisUtterance(currentListening.question);
+    speechSynthesis.speak(utterance);
+  };
+
+  return (
+    <div className="p-6 max-w-4xl mx-auto">
+      <motion.h1 className="text-3xl font-bold mb-2 text-center text-blue-600" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+        🎉 Verb Tense Simulator for ELL Students 🎉
+      </motion.h1>
+
+      <div className="text-center text-lg">⏱️ Time Left: <span className="font-bold text-red-500">{timeLeft}s</span></div>
+      <div className="text-center text-xl my-2">🧸 Avatar: <span className="text-3xl">{avatar}</span> | 🧩 Level: {level} {badge}</div>
+
+      <Tabs defaultValue="learn" className="w-full">
+        <TabsList className="grid grid-cols-4 mb-4">
+          <TabsTrigger value="learn">🎓 Learn</TabsTrigger>
+          <TabsTrigger value="game">🎮 Practice Game</TabsTrigger>
+          <TabsTrigger value="sentences">✍️ Complete Sentences</TabsTrigger>
+          <TabsTrigger value="listening">🎧 Listening</TabsTrigger>
+        </TabsList>
+
+        // ... existing content (unchanged) ...
+
+        <TabsContent value="listening">
+          <motion.div className="bg-pink-100 p-6 rounded-lg shadow-lg" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <h2 className="text-xl font-bold mb-4">🎧 Listening Practice</h2>
+            <div className="mb-2">
+              <label className="font-semibold mr-2">Choose difficulty:</label>
+              <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+            </div>
+            <Button className="mb-4" onClick={playListening}>🔊 Play Sentence</Button>
+            <div className="grid gap-2">
+              {currentListening.options.map((opt, idx) => (
+                <Button key={idx} variant="outline" onClick={() => handleListeningAnswer(opt)}>{opt}</Button>
+              ))}
+            </div>
+            <p className="mt-4 text-lg">{feedback}</p>
+          </motion.div>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
