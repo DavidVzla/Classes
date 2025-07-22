@@ -1,169 +1,289 @@
-// Full simulator with listening section, multiple-choice, and difficulty levels
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { motion } from "framer-motion";
-import confetti from "canvas-confetti";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verb Tense Simulator</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
-const avatars = ["🐶", "🐱", "🦊", "🐵", "🐸"];
+    <style>
+        :root {
+            --color-primary: #2563eb;
+            --color-secondary: #4f46e5;
+            --color-danger: #ef4444;
+            --color-success: #22c55e;
+            --color-text: #333;
+            --bg-light: #f3f4f6;
+            --border-color: #d1d5db;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
 
-const verbs = [
-  { base: "run", present: "run", past: "ran", presentProgressive: "running" },
-  { base: "eat", present: "eat", past: "ate", presentProgressive: "eating" },
-  { base: "play", present: "play", past: "played", presentProgressive: "playing" },
-  { base: "write", present: "write", past: "wrote", presentProgressive: "writing" },
-  { base: "swim", present: "swim", past: "swam", presentProgressive: "swimming" },
-  { base: "read", present: "read", past: "read", presentProgressive: "reading" },
-  { base: "jump", present: "jump", past: "jumped", presentProgressive: "jumping" },
-  { base: "dance", present: "dance", past: "danced", presentProgressive: "dancing" },
-  { base: "sing", present: "sing", past: "sang", presentProgressive: "singing" },
-  { base: "drink", present: "drink", past: "drank", presentProgressive: "drinking" }
-];
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--color-text);
+            margin: 0;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
 
-const sentences = [
-  { sentence: "I ___ to school every day.", verb: "walk", answer: "walk" },
-  { sentence: "She is ___ her homework.", verb: "do", answer: "doing" },
-  { sentence: "They ___ a movie last night.", verb: "watch", answer: "watched" }
-];
+        #app-container {
+            max-width: 896px; /* max-w-4xl */
+            width: 100%;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeIn 0.6s ease forwards;
+        }
 
-const listeningOptions = {
-  easy: [
-    { question: "I like to swim.", options: ["I like to swim.", "I like to eat.", "I like to run."], answer: "I like to swim." },
-    { question: "She is running.", options: ["She is running.", "She is eating.", "She is reading."], answer: "She is running." }
-  ],
-  medium: [
-    { question: "They are playing outside.", options: ["They are playing outside.", "They are reading books.", "They are eating lunch."], answer: "They are playing outside." }
-  ],
-  hard: [
-    { question: "He wrote a letter to his friend.", options: ["He wrote a letter to his friend.", "He read a book.", "He swam at the pool."], answer: "He wrote a letter to his friend." }
-  ]
-};
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-export default function VerbTenseSimulator() {
-  const [score, setScore] = useState(0);
-  const [level, setLevel] = useState(1);
-  const [badge, setBadge] = useState("");
-  const [currentVerb, setCurrentVerb] = useState(verbs[0]);
-  const [userInput, setUserInput] = useState({ present: "", past: "", progressive: "" });
-  const [feedback, setFeedback] = useState("");
-  const [avatar, setAvatar] = useState(avatars[0]);
-  const [timeLeft, setTimeLeft] = useState(30);
-  const [sentenceIndex, setSentenceIndex] = useState(0);
-  const [sentenceInput, setSentenceInput] = useState("");
-  const [difficulty, setDifficulty] = useState("easy");
-  const [listeningIndex, setListeningIndex] = useState(0);
-  const currentSentence = sentences[sentenceIndex];
-  const currentListening = listeningOptions[difficulty][listeningIndex];
+        h1 {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 700; /* font-bold */
+            color: var(--color-primary);
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
 
-  useEffect(() => {
-    if (feedback.includes("3 out of 3")) {
-      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-      const audio = new Audio("/sounds/success.mp3");
-      audio.play();
-    }
-  }, [feedback]);
+        .header-info {
+            text-align: center;
+            font-size: 1.25rem; /* text-xl */
+            margin: 0.5rem 0 1rem 0;
+        }
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+        .header-info span {
+            font-weight: 700;
+        }
 
-  const getRandomVerb = () => {
-    const random = verbs[Math.floor(Math.random() * verbs.length)];
-    setCurrentVerb(random);
-    setUserInput({ present: "", past: "", progressive: "" });
-    setFeedback("");
-    setTimeLeft(30);
-  };
+        .time-left {
+            color: var(--color-danger);
+        }
 
-  const checkAnswers = () => {
-    let correct = 0;
-    if (userInput.present.toLowerCase() === currentVerb.present) correct++;
-    if (userInput.past.toLowerCase() === currentVerb.past) correct++;
-    if (userInput.progressive.toLowerCase() === currentVerb.presentProgressive) correct++;
-    setScore(prev => {
-      const newScore = prev + correct;
-      const newLevel = Math.floor(newScore / 10) + 1;
-      if (newLevel > level) {
-        setLevel(newLevel);
-        setBadge(`🏅 Level ${newLevel}`);
-      }
-      return newScore;
-    });
-    if (correct === 3) {
-      const newAvatar = avatars[Math.floor(Math.random() * avatars.length)];
-      setAvatar(newAvatar);
-    }
-    setFeedback(`You got ${correct} out of 3 correct!`);
-  };
+        /* Tabs Styling */
+        .tabs-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            background-color: #e5e7eb;
+            padding: 0.25rem;
+        }
 
-  const checkSentence = () => {
-    if (sentenceInput.trim().toLowerCase() === currentSentence.answer) {
-      setFeedback("✅ Correct!");
-      setScore(prev => prev + 1);
-    } else {
-      setFeedback("❌ Try again.");
-    }
-    setSentenceInput("");
-    setSentenceIndex((prev) => (prev + 1) % sentences.length);
-  };
+        .tab-trigger {
+            background-color: transparent;
+            border: none;
+            padding: 0.75rem 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: #4b5563;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s, color 0.2s;
+        }
 
-  const handleListeningAnswer = (option) => {
-    const isCorrect = option === currentListening.answer;
-    setFeedback(isCorrect ? "✅ Correct!" : "❌ Try again.");
-    if (isCorrect) setScore((prev) => prev + 1);
-    setListeningIndex((prev) => (prev + 1) % listeningOptions[difficulty].length);
-  };
+        .tab-trigger.active {
+            background-color: var(--card-bg);
+            color: var(--color-text);
+            box-shadow: var(--shadow);
+        }
+        
+        .tab-trigger:hover:not(.active) {
+            background-color: #d1d5db;
+        }
 
-  const playListening = () => {
-    const utterance = new SpeechSynthesisUtterance(currentListening.question);
-    speechSynthesis.speak(utterance);
-  };
+        .tab-content {
+            display: none;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow);
+        }
 
-  return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <motion.h1 className="text-3xl font-bold mb-2 text-center text-blue-600" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-        🎉 Verb Tense Simulator for ELL Students 🎉
-      </motion.h1>
+        .tab-content.active {
+            display: block;
+        }
 
-      <div className="text-center text-lg">⏱️ Time Left: <span className="font-bold text-red-500">{timeLeft}s</span></div>
-      <div className="text-center text-xl my-2">🧸 Avatar: <span className="text-3xl">{avatar}</span> | 🧩 Level: {level} {badge}</div>
+        /* Component Styles */
+        .card {
+            background-color: var(--card-bg);
+        }
+        
+        .card-purple {
+            background-color: #f5f3ff;
+        }
 
-      <Tabs defaultValue="learn" className="w-full">
-        <TabsList className="grid grid-cols-4 mb-4">
-          <TabsTrigger value="learn">🎓 Learn</TabsTrigger>
-          <TabsTrigger value="game">🎮 Practice Game</TabsTrigger>
-          <TabsTrigger value="sentences">✍️ Complete Sentences</TabsTrigger>
-          <TabsTrigger value="listening">🎧 Listening</TabsTrigger>
-        </TabsList>
+        .card-pink {
+             background-color: #fce7f3;
+        }
 
-        // ... existing content (unchanged) ...
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
 
-        <TabsContent value="listening">
-          <motion.div className="bg-pink-100 p-6 rounded-lg shadow-lg" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <h2 className="text-xl font-bold mb-4">🎧 Listening Practice</h2>
-            <div className="mb-2">
-              <label className="font-semibold mr-2">Choose difficulty:</label>
-              <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
-              </select>
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background-color: var(--color-secondary);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #4338ca;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border-color: var(--border-color);
+            color: var(--color-text);
+        }
+        
+        .btn-outline:hover {
+            background-color: #f3f4f6;
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .button-grid {
+            display: grid;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app-container">
+        <h1>🎉 Verb Tense Simulator for ELL Students 🎉</h1>
+
+        <div class="header-info">
+            ⏱️ Time Left: <span id="time-left" class="time-left">30s</span>
+        </div>
+        <div class="header-info">
+            🧸 Avatar: <span id="avatar" style="font-size: 2rem;"></span> | 🧩 Level: <span id="level-display"></span> <span id="badge-display"></span>
+        </div>
+
+        <div class="tabs">
+            <div id="tabs-list" class="tabs-list">
+                <button class="tab-trigger active" data-tab="learn">🎓 Learn</button>
+                <button class="tab-trigger" data-tab="game">🎮 Practice Game</button>
+                <button class="tab-trigger" data-tab="sentences">✍️ Complete Sentences</button>
+                <button class="tab-trigger" data-tab="listening">🎧 Listening</button>
             </div>
-            <Button className="mb-4" onClick={playListening}>🔊 Play Sentence</Button>
-            <div className="grid gap-2">
-              {currentListening.options.map((opt, idx) => (
-                <Button key={idx} variant="outline" onClick={() => handleListeningAnswer(opt)}>{opt}</Button>
-              ))}
+
+            <div id="tab-content-learn" class="tab-content card active">
+                <h2>How Verb Tenses Work</h2>
+                <p>This simulator helps you practice three common verb tenses:</p>
+                <ul>
+                    <li><strong>Simple Present:</strong> Used for habits, facts, and repeated actions. (e.g., "I <strong>run</strong> every day.")</li>
+                    <li><strong>Simple Past:</strong> Used for actions that started and finished in the past. (e.g., "Yesterday, I <strong>ran</strong> a mile.")</li>
+                    <li><strong>Present Progressive:</strong> Used for actions happening right now. (e.g., "Look! I am <strong>running</strong>.")</li>
+                </ul>
+                <p>Select a tab above to start practicing!</p>
             </div>
-            <p className="mt-4 text-lg">{feedback}</p>
-          </motion.div>
-        </TabsContent>
-      </Tabs>
+
+            <div id="tab-content-game" class="tab-content card-purple">
+                 <h2>🎮 Practice Game: Conjugate the Verb</h2>
+                 <p class="form-group">Base Verb: <strong id="base-verb" style="font-size: 1.25rem;"></strong></p>
+                 <div class="form-group">
+                    <label for="present-input">Present Tense (e.g., run)</label>
+                    <input type="text" id="present-input" class="input">
+                 </div>
+                 <div class="form-group">
+                    <label for="past-input">Past Tense (e.g., ran)</label>
+                    <input type="text" id="past-input" class="input">
+                 </div>
+                 <div class="form-group">
+                    <label for="progressive-input">Present Progressive (e.g., running)</label>
+                    <input type="text" id="progressive-input" class="input">
+                 </div>
+                 <button id="check-answers-btn" class="btn btn-primary">Check Answers</button>
+                 <button id="next-verb-btn" class="btn btn-secondary" style="margin-left: 8px;">Next Verb</button>
+                 <p id="game-feedback" class="feedback"></p>
+            </div>
+
+            <div id="tab-content-sentences" class="tab-content card">
+                <h2>✍️ Complete the Sentence</h2>
+                <p>Fill in the blank with the correct form of the verb in parentheses.</p>
+                <div class="form-group">
+                    <p id="sentence-text" style="font-size: 1.2rem;"></p>
+                    <input type="text" id="sentence-input" class="input" placeholder="Type the correct verb form...">
+                </div>
+                <button id="check-sentence-btn" class="btn btn-primary">Check</button>
+                <p id="sentence-feedback" class="feedback"></p>
+            </div>
+
+            <div id="tab-content-listening" class="tab-content card-pink">
+                <h2>🎧 Listening Practice</h2>
+                <div class="form-group">
+                    <label for="difficulty-select">Choose difficulty:</label>
+                    <select id="difficulty-select">
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+                <button id="play-listening-btn" class="btn btn-secondary" style="margin-bottom: 1rem;">🔊 Play Sentence</button>
+                <div id="listening-options" class="button-grid"></div>
+                <p id="listening-feedback" class="feedback"></p>
+            </div>
+        </div>
     </div>
-  );
-}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DATA ---
+            const avatars = ["🐶", "🐱", "🦊", "🐵", "🐸"];
+            const verbs = [
+                { base: "run", present: "run", past: "ran
