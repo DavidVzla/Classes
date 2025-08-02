@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinguaMentor | Personal Language Teacher</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#10b981',
+                        accent: '#f59e0b',
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles */
+        .hero-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
+        }
+        .language-card {
+            transition: all 0.3s ease;
+        }
+        .language-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .testimonial-card {
+            transition: all 0.3s ease;
+        }
+        .testimonial-card:hover {
+            transform: scale(1.02);
+        }
+        .contact-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50 text-dark">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-2">
+                <i class="fas fa-language text-3xl text-primary"></i>
+                <span class="text-2xl font-bold text-dark">Lingua<span class="text-primary">Mentor</span></span>
+            </a>
+            
+            <div class="hidden md:flex space-x-8">
+                <a href="#home" class="text-dark hover:text-primary font-medium">Home</a>
+                <a href="#about" class="text-dark hover:text-primary font-medium">About</a>
+                <a href="#services" class="text-dark hover:text-primary font-medium">Services</a>
+                <a href="#testimonials" class="text-dark hover:text-primary font-medium">Testimonials</a>
+                <a href="#contact" class="text-dark hover:text-primary font-medium">Contact</a>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                    Book a Lesson
+                </button>
+                <button id="mobile-menu-button" class="md:hidden text-dark">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white py-2 px-4 shadow-lg">
+            <a href="#home" class="block py-2 text-dark hover:text-primary">Home</a>
+            <a href="#about" class="block py-2 text-dark hover:text-primary">About</a>
+            <a href="#services" class="block py-2 text-dark hover:text-primary">Services</a>
+            <a href="#testimonials" class="block py-2 text-dark hover:text-primary">Testimonials</a>
+            <a href="#contact" class="block py-2 text-dark hover:text-primary">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-gradient text-white py-20">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">Master English & Spanish with Personalized Lessons</h1>
+                <p class="text-xl mb-8">Customized language learning tailored to your goals, schedule, and learning style.</p>
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                    <button class="bg-white text-primary font-bold px-6 py-3 rounded-lg hover:bg-gray-100 transition">
+                        Start Learning Today
+                    </button>
+                    <button class="bg-transparent border-2 border-white text-white font-bold px-6 py-3 rounded-lg hover:bg-white hover:text-primary transition">
+                        Free Trial Lesson
+                    </button>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" 
+                     alt="Language Learning" 
+                     class="rounded-lg shadow-2xl max-w-md w-full h-auto">
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">Meet Your Language Mentor</h2>
+                <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    With over 10 years of teaching experience and certifications in both English and Spanish instruction, 
+                    I'm dedicated to helping you achieve fluency through engaging, personalized lessons.
+                </p>
+            </div>
+            
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/3 mb-10 md:mb-0 flex justify-center">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80" 
+                             alt="Teacher" 
+                             class="rounded-full w-64 h-64 object-cover border-4 border-primary shadow-lg">
+                        <div class="absolute -bottom-4 -right-4 bg-accent text-white px-4 py-2 rounded-lg shadow-lg">
+                            <i class="fas fa-award mr-2"></i>Certified Teacher
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="md:w-2/3 md:pl-12">
+                    <h3 class="text-2xl font-bold mb-6">Why Choose Personalized Language Lessons?</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="flex items-start">
+                            <div class="bg-primary bg-opacity-10 p-3 rounded-full mr-4">
+                                <i class="fas fa-chalkboard-teacher text-primary text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold mb-2">Customized Curriculum</h4>
+                                <p class="text-gray-600">Lessons tailored to your specific needs, whether it's business English, travel Spanish, or exam preparation.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-primary bg-opacity-10 p-3 rounded-full mr-4">
+                                <i class="fas fa-comments text-primary text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold mb-2">Conversation Focus</h4>
+                                <p class="text-gray-600">Develop real communication skills through meaningful conversations from day one.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-primary bg-opacity-10 p-3 rounded-full mr-4">
+                                <i class="fas fa-clock text-primary text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold mb-2">Flexible Scheduling</h4>
+                                <p class="text-gray-600">Learn at your convenience with morning, afternoon, or evening lessons available.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-primary bg-opacity-10 p-3 rounded-full mr-4">
+                                <i class="fas fa-chart-line text-primary text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold mb-2">Progress Tracking</h4>
+                                <p class="text-gray-600">Regular assessments and feedback to ensure you're making consistent progress.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <button class="bg-primary text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition flex items-center">
+                            <i class="fas fa-book-open mr-2"></i> View My Teaching Methodology
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">Language Programs</h2>
+                <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    Comprehensive language programs designed for all levels, from complete beginners to advanced speakers.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- English Card -->
+                <div class="language-card bg-white p-8 rounded-xl shadow-md border-t-4 border-primary">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-2">English Programs</h3>
+                            <p class="text-gray-600">Master the global language</p>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-lg">
+                            <i class="fas fa-globe-europe text-primary text-2xl"></i>
+                        </div>
+                    </div>
+                    
+                    <ul class="mb-8 space-y-3">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-primary mr-2"></i>
+                            <span>General English (A1-C2)</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-primary mr-2"></i>
+                            <span>Business English</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-primary mr-2"></i>
+                            <span>IELTS/TOEFL Preparation</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-primary mr-2"></i>
+                            <span>Conversation Practice</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-primary mr-2"></i>
+                            <span>Pronunciation Coaching</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="flex justify-between items-center">
+                        <span class="text-2xl font-bold">From $25<span class="text-sm font-normal">/lesson</span></span>
+                        <button class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Spanish Card -->
+                <div class="language-card bg-white p-8 rounded-xl shadow-md border-t-4 border-secondary">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-2">Spanish Programs</h3>
+                            <p class="text-gray-600">Discover the beauty of Español</p>
+                        </div>
+                        <div class="bg-secondary bg-opacity-10 p-3 rounded-lg">
+                            <i class="fas fa-globe-americas text-secondary text-2xl"></i>
+                        </div>
+                    </div>
+                    
+                    <ul class="mb-8 space-y-3">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-secondary mr-2"></i>
+                            <span>General Spanish (A1-C2)</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-secondary mr-2"></i>
+                            <span>Latin American Spanish</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-secondary mr-2"></i>
+                            <span>DELE Preparation</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-secondary mr-2"></i>
+                            <span>Travel Spanish</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-secondary mr-2"></i>
+                            <span>Cultural Immersion</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="flex justify-between items-center">
+                        <span class="text-2xl font-bold">From $22<span class="text-sm font-normal">/lesson</span></span>
+                        <button class="bg-secondary text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Special Programs Card -->
+                <div class="language-card bg-white p-8 rounded-xl shadow-md border-t-4 border-accent">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-2">Special Programs</h3>
+                            <p class="text-gray-600">Tailored learning experiences</p>
+                        </div>
+                        <div class="bg-accent bg-opacity-10 p-3 rounded-lg">
+                            <i class="fas fa-star text-accent text-2xl"></i>
+                        </div>
+                    </div>
+                    
+                    <ul class="mb-8 space-y-3">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-accent mr-2"></i>
+                            <span>Kids & Teens Programs</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-accent mr-2"></i>
+                            <span>Corporate Language Training</span>
+                        </li
+</body>
+</html>
