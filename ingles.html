@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Lesson 1: Greetings & Introductions</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        
+        .lesson-info {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        
+        .info-item {
+            text-align: center;
+            margin: 5px;
+        }
+        
+        .info-item strong {
+            display: block;
+            font-size: 1.2em;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .timer {
+            background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .vocabulary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .vocab-card {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .vocab-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .vocab-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.8em;
+        }
+        
+        .vocab-card p {
+            margin: 5px 0;
+            font-size: 1.1em;
+        }
+        
+        .pronunciation {
+            background: #e17055;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-style: italic;
+            font-size: 0.9em;
+        }
+        
+        .audio-section {
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .audio-exercise {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        
+        .padlet-setup {
+            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .kahoot-setup {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .question-bank {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .question-card {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #fff;
+        }
+        
+        .checklist {
+            background: #dff0d8;
+            border: 1px solid #d6e9c6;
+            color: #3c763d;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .checklist ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .interactive-btn {
+            background: linear-gradient(135deg, #ff7675 0%, #d63031 100%);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .interactive-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .note-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .note-box strong {
+            color: #e17055;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌟 ESL Lesson 1: Greetings & Introductions</h1>
+            <div class="lesson-info">
+                <div class="info-item">
+                    <strong>Total Time</strong>
+                    50 minutes
+                </div>
+                <div class="info-item">
+                    <strong>Level</strong>
+                    Beginner (A1)
+                </div>
+                <div class="info-item">
+                    <strong>Students</strong>
+                    8-15 participants
+                </div>
+                <div class="info-item">
+                    <strong>Platform</strong>
+                    Zoom + Interactive Tools
+                </div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- SECTION 1: VOCABULARY PRESENTATION -->
+            <div class="section">
+                <div class="timer">⏰ 10 Minutes</div>
+                <h2>1. Greetings Vocabulary Presentation</h2>
+                
+                <div class="note-box">
+                    <strong>Teacher Instructions:</strong> Share your screen and present each greeting with clear pronunciation. Encourage students to repeat after you.
+                </div>
+                
+                <div class="vocabulary-grid">
+                    <div class="vocab-card">
+                        <h3>Hello</h3>
+                        <span class="pronunciation">/həˈloʊ/</span>
+                        <p><strong>Use:</strong> Formal & informal</p>
+                        <p><strong>Time:</strong> Any time</p>
+                    </div>
+                    
+                    <div class="vocab-card">
+                        <h3>Hi</h3>
+                        <span class="pronunciation">/haɪ/</span>
+                        <p><strong>Use:</strong> Informal</p>
+                        <p><strong>Time:</strong> Any time</p>
+                    </div>
+                    
+                    <div class="vocab-card">
+                        <h3>Good morning</h3>
+                        <span class="pronunciation">/ɡʊd ˈmɔrnɪŋ/</span>
+                        <p><strong>Use:</strong> Formal & informal</p>
+                        <p><strong>Time:</strong> 6 AM - 12 PM</p>
+                    </div>
+                    
+                    <div class="vocab-card">
+                        <h3>Good afternoon</h3>
+                        <span class="pronunciation">/ɡʊd ˌæftərˈnun/</span>
+                        <p><strong>Use:</strong> Formal & informal</p>
+                        <p><strong>Time:</strong> 12 PM - 6 PM</p>
+                    </div>
+                    
+                    <div class="vocab-card">
+                        <h3>Good evening</h3>
+                        <span class="pronunciation">/ɡʊd ˈivnɪŋ/</span>
+                        <p><strong>Use:</strong> Formal & informal</p>
+                        <p><strong>Time:</strong> 6 PM - 10 PM</p>
+                    </div>
+                    
+                    <div class="vocab-card">
+                        <h3>Nice to meet you</h3>
+                        <span class="pronunciation">/naɪs tu mit yu/</span>
+                        <p><strong>Use:</strong> First meetings</p>
+                        <p><strong>Response:</strong> "Nice to meet you too"</p>
+                    </div>
+                    
+                    <div class="vocab-card">
+                        <h3>How are you?</h3>
+                        <span class="pronunciation">/haʊ ɑr yu/</span>
+                        <p><strong>Use:</strong> Asking about wellbeing</p>
+                        <p><strong>Response:</strong> "I'm fine, thank you"</p>
+                    </div>
+                    
+                    <div class="vocab-card">
+                        <h3>What's your name?</h3>
+                        <span class="pronunciation">/wʌts yʊr neɪm/</span>
+                        <p><strong>Use:</strong> Asking for someone's name</p>
+                        <p><strong>Response:</strong> "My name is..."</p>
+                    </div>
+                </div>
+                
+                <div class="checklist">
+                    <strong>Presentation Checklist:</strong>
+                    <ul>
+                        <li>✅ Show each greeting with pronunciation</li>
+                        <li>✅ Explain formal vs informal usage</li>
+                        <li>✅ Demonstrate appropriate responses</li>
+                        <li>✅ Have students repeat chorally</li>
+                        <li>✅ Check understanding with simple questions</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- SECTION 2: AUDIO PRACTICE -->
+            <div class="section">
+                <div class="timer">⏰ 15 Minutes</div>
+                <h2>2. Audio Practice & Pronunciation</h2>
+                
+                <div class="audio-section">
+                    <h3>🎧 Listening Exercise 1: Greeting Identification (5 minutes)</h3>
+                    <div class="audio-exercise">
+                        <strong>Instructions:</strong> Play audio clips of different greetings. Students identify which greeting they hear.
+                        <br><br>
+                        <strong>Audio Clips to Use:</strong>
+                        <ul>
+                            <li>1. "Good morning, class!" (Answer: Good morning)</li>
+                            <li>2. "Hi there, how are you?" (Answer: Hi)</li>
+                            <li>3. "Good evening, everyone." (Answer: Good evening)</li>
+                            <li>4. "Hello, nice to meet you." (Answer: Hello)</li>
+                            <li>5. "Good afternoon, students." (Answer: Good afternoon)</li>
+                        </ul>
+                        <strong>Free Audio Source:</strong> Use text-to-speech tools like Google Translate or record yourself
+                    </div>
+                </div>
+                
+                <div class="audio-section">
+                    <h3>🎙️ Pronunciation Practice (5 minutes)</h3>
+                    <div class="audio-exercise">
+                        <strong>Drill Activity:</strong>
+                        <ol>
+                            <li>Teacher says greeting → Students repeat (all together)</li>
+                            <li>Teacher points to individual students → Student repeats alone</li>
+                            <li>Focus on problem sounds: /θ/ in "thank you", /oʊ/ in "hello"</li>
+                        </ol>
+                        <strong>Pronunciation Focus:</strong>
+                        <ul>
+                            <li><strong>Hello:</strong> Stress on second syllable (he-LLO)</li>
+                            <li><strong>Thank you:</strong> Practice "th" sound /θ/</li>
+                            <li><strong>Nice:</strong> Long "i" sound /aɪ/</li>
+                            <li><strong>Meet:</strong> Long "e" sound /i/</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="audio-section">
+                    <h3>🗣️ Dialogue Practice (5 minutes)</h3>
+                    <div class="audio-exercise">
+                        <strong>Mini Dialogues - Students practice in pairs using breakout rooms:</strong>
+                        <br><br>
+                        <strong>Dialogue 1:</strong><br>
+                        A: Good morning!<br>
+                        B: Good morning! How are you?<br>
+                        A: I'm fine, thank you. And you?<br>
+                        B: I'm good, thanks!<br><br>
+                        
+                        <strong>Dialogue 2:</strong><br>
+                        A: Hi, I'm [name]. What's your name?<br>
+                        B: Hello, my name is [name]. Nice to meet you.<br>
+                        A: Nice to meet you too!<br><br>
+                        
+                        <strong>Teacher Role:</strong> Visit breakout rooms to listen and provide feedback
+                    </div>
+                </div>
+                
+                <div class="note-box">
+                    <strong>Audio Practice Tips:</strong>
+                    <ul>
+                        <li>Use Zoom's "Share Computer Sound" feature for audio clips</li>
+                        <li>Encourage students to unmute during pronunciation practice</li>
+                        <li>Use breakout rooms for pair practice</li>
+                        <li>Record sample dialogues beforehand if needed</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- SECTION 3: PADLET ACTIVITY -->
+            <div class="section">
+                <div class="timer">⏰ 15 Minutes</div>
+                <h2>3. Padlet Collaborative Introductions</h2>
+                
+                <div class="padlet-setup">
+                    <h3>🎨 Padlet Setup Instructions</h3>
+                    <p><strong>Step 1:</strong> Go to padlet.com and create a free account</p>
+                    <p><strong>Step 2:</strong> Choose "Wall" template</p>
+                    <p><strong>Step 3:</strong> Title: "Our Class Introductions - Lesson 1"</p>
+                    <p><strong>Step 4:</strong> Description: "Share your introduction using the phrases we learned!"</p>
+                    <p><strong>Step 5:</strong> Set to "Public" so students can contribute</p>
+                    <p><strong>Step 6:</strong> Share the link in Zoom chat</p>
+                </div>
+                
+                <div class="note-box">
+                    <strong>Student Instructions to Share:</strong><br>
+                    "Create a post on our Padlet board with your introduction. Include:
+                    <ul>
+                        <li>Your name</li>
+                        <li>A greeting</li>
+                        <li>One thing about yourself</li>
+                        <li>A photo (optional)</li>
+                    </ul>
+                    <strong>Example:</strong> "Hello! My name is Maria. I'm from Mexico. Nice to meet everyone!"
+                </div>
+                
+                <div class="checklist">
+                    <strong>Activity Timeline (15 minutes):</strong>
+                    <ul>
+                        <li>✅ 2 min: Explain Padlet and share link</li>
+                        <li>✅ 1 min: Show example post</li>
+                        <li>✅ 10 min: Students create their posts</li>
+                        <li>✅ 2 min: Read some posts aloud and celebrate</li>
+                    </ul>
+                </div>
+                
+                <div class="interactive-btn" onclick="showPadletExample()">
+                    View Sample Padlet Post
+                </div>
+                
+                <div id="padletExample" style="display:none; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin-top: 10px;">
+                    <strong>Sample Student Post:</strong><br>
+                    "Good morning, everyone! 👋<br>
+                    My name is Carlos. I'm from Brazil.<br>
+                    I love soccer and pizza! 🏈🍕<br>
+                    Nice to meet you all!"
+                </div>
+            </div>
+            
+            <!-- SECTION 4: KAHOOT QUIZ -->
+            <div class="section">
+                <div class="timer">⏰ 10 Minutes</div>
+                <h2>4. Kahoot Vocabulary Quiz</h2>
+                
+                <div class="kahoot-setup">
+                    <h3>🎮 Kahoot Setup Instructions</h3>
+                    <p><strong>Step 1:</strong> Go to create.kahoot.it</p>
+                    <p><strong>Step 2:</strong> Create free account and choose "Quiz"</p>
+                    <p><strong>Step 3:</strong> Title: "Greetings & Introductions Quiz"</p>
+                    <p><strong>Step 4:</strong> Add the questions below</p>
+                    <p><strong>Step 5:</strong> Set to "Live" mode for class play</p>
+                </div>
+                
+                <h3>📝 Ready-to-Use Kahoot Questions</h3>
+                <div class="question-bank">
+                    <div class="question-card">
+                        <strong>Question 1:</strong><br>
+                        What do you say when you meet someone for the first time?<br>
+                        <strong>Options:</strong><br>
+                        A) How are you? ❌<br>
+                        B) Nice to meet you ✅<br>
+                        C) Good morning ❌<br>
+                        D) Thank you ❌
+                    </div>
+                    
+                    <div class="question-card">
+                        <strong>Question 2:</strong><br>
+                        Which greeting do you use at 2 PM?<br>
+                        <strong>Options:</strong><br>
+                        A) Good morning ❌<br>
+                        B) Good evening ❌<br>
+                        C) Good afternoon ✅<br>
+                        D) Good night ❌
+                    </div>
+                    
+                    <div class="question-card">
+                        <strong>Question 3:</strong><br>
+                        What's the response to "How are you?"<br>
+                        <strong>Options:</strong><br>
+                        A) Hello ❌<br>
+                        B) Nice to meet you ❌<br>
+                        C) My name is... ❌<br>
+                        D) I'm fine, thank you ✅
+                    </div>
+                    
+                    <div class="question-card">
+                        <strong>Question 4:</strong><br>
+                        Which is more informal?<br>
+                        <strong>Options:</strong><br>
+                        A) Good morning ❌<br>
+                        B) Hi ✅<br>
+                        C) Good evening ❌<br>
+                        D) Good afternoon ❌
+                    </div>
+                    
+                    <div class="question-card">
+                        <strong>Question 5:</strong><br>
+                        What question do you ask to know someone's name?<br>
+                        <strong>Options:</strong><br>
+                        A) How are you? ❌<br>
+                        B) Nice to meet you ❌<br>
+                        C) What's your name? ✅<br>
+                        D) Good morning ❌
+                    </div>
+                    
+                    <div class="question-card">
+                        <strong>Question 6:</strong><br>
+                        When do you say "Good evening"?<br>
+                        <strong>Options:</strong><br>
+                        A) 10 AM ❌<br>
+                        B) 2 PM ❌<br>
+                        C) 7 PM ✅<br>
+                        D) 11 PM ❌
+                    </div>
+                    
+                    <div class="question-card">
+                        <strong>Question 7:</strong><br>
+                        Complete: "My name __ John."<br>
+                        <strong>Options:</strong><br>
+                        A) am ❌<br>
+                        B) is ✅<br>
+                        C) are ❌<br>
+                        D) be ❌
+                    </div>
+                    
+                    <div class="question-card">
+                        <strong>Question 8:</strong><br>
+                        What's the response to "Nice to meet you"?<br>
+                        <strong>Options:</strong><br>
+                        A) Thank you ❌<br>
+                        B) How are you? ❌<br>
+                        C) Nice to meet you too ✅<br>
+                        D) Good morning ❌
+                    </div>
+                </div>
+                
+                <div class="note-box">
+                    <strong>Kahoot Playing Instructions:</strong>
+                    <ol>
+                        <li>Share your screen showing the Kahoot</li>
+                        <li>Students join using the game PIN on their phones/computers</li>
+                        <li>Read each question aloud clearly</li>
+                        <li>Give 30 seconds per question</li>
+                        <li>Celebrate correct answers and explain mistakes</li>
+                        <li>Show final scoreboard and congratulate everyone</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <!-- LESSON WRAP-UP -->
+            <div class="section">
+                <h2>📋 Lesson Wrap-up & Homework</h2>
+                
+                <div class="checklist">
+                    <strong>Quick Review (2 minutes):</strong>
+                    <ul>
+                        <li>✅ "What greetings did we learn today?"</li>
+                        <li>✅ "When do we say 'Good afternoon'?"</li>
+                        <li>✅ "How do we respond to 'Nice to meet you'?"</li>
+                    </ul>
+                </div>
+                
+                <div class="note-box">
+                    <strong>Homework Assignment:</strong><br>
+                    "Practice introducing yourself to 3 different people this week using the phrases we learned. Try to use different greetings depending on the time of day. We'll share our experiences next class!"
+                </div>
+                
+                <div class="note-box">
+                    <strong>Next Lesson Preview:</strong><br>
+                    "Next week we'll learn numbers 1-20 and colors. We'll practice asking 'How old are you?' and describing things around us!"
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showPadletExample() {
+            const example = document.getElementById('padletExample');
+            if (example.style.display === 'none') {
+                example.style.display = 'block';
+            } else {
+                example.style.display = 'none';
+            }
+        }
+        
+        // Add some interactivity for the vocab cards
+        document.querySelectorAll('.vocab-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = this.style.transform === 'scale(1.05)' ? 'scale(1)' : 'scale(1.05)';
+            });
+        });
+    </script>
+</body>
+</html>
