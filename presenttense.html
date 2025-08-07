@@ -1,0 +1,118 @@
+
+make all of these an html  version java ccs interactive
+
+
+
+
+Claude 3 Haiku - Anthropic (8.303s - 4,026 credits)
+Here is an HTML, CSS, and JavaScript interactive version of the worksheets:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESL Worksheets</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    
+    .worksheet {
+      margin-bottom: 40px;
+    }
+    
+    .question {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .question img {
+      max-width: 200px;
+      margin-right: 20px;
+    }
+    
+    input[type="text"] {
+      padding: 5px;
+      font-size: 16px;
+    }
+    
+    button {
+      padding: 8px 16px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .result {
+      margin-top: 5px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="worksheet">
+    <h2>Worksheet 1: Simple Present Tense</h2>
+    <div class="question">
+      <img src="hammer.jpg" alt="Hammering">
+      <span>He hammers the nail.</span>
+    </div>
+    <div class="question">
+      <img src="not-sweeping.jpg" alt="Not sweeping">
+      <span>He does not sweep the floor.</span>
+    </div>
+    <div class="question">
+      <img src="sawing.jpg" alt="Cutting wood">
+      <span>Does he cut the wood?</span>
+    </div>
+  </div>
+  
+  <div class="worksheet">
+    <h2>Worksheet 2: Vocabulary - Tools</h2>
+    <div class="question">
+      <img src="hammer.jpg" alt="Hammer">
+      <input type="text" placeholder="Enter the tool name">
+      <button onclick="checkAnswer(this, 'hammer')">Check</button>
+      <div class="result"></div>
+    </div>
+    <div class="question">
+      <img src="wrench.jpg" alt="Wrench">
+      <input type="text" placeholder="Enter the tool name">
+      <button onclick="checkAnswer(this, 'wrench')">Check</button>
+      <div class="result"></div>
+    </div>
+    <div class="question">
+      <img src="screwdriver.jpg" alt="Screwdriver">
+      <input type="text" placeholder="Enter the tool name">
+      <button onclick="checkAnswer(this, 'screwdriver')">Check</button>
+      <div class="result"></div>
+    </div>
+    <div class="question">
+      <img src="wrench.jpg" alt="Wrench">
+      <span>The worker uses a _______ to tighten the bolt.</span>
+      <input type="text" placeholder="Enter the tool name">
+      <button onclick="checkAnswer(this, 'wrench')">Check</button>
+      <div class="result"></div>
+    </div>
+  </div>
+
+  <script>
+    function checkAnswer(button, correctAnswer) {
+      const input = button.previousElementSibling;
+      const result = button.nextElementSibling;
+
+      if (input.value.toLowerCase() === correctAnswer.toLowerCase()) {
+        result.textContent = "Correct!";
+        result.style.color = "green";
+      } else {
+        result.textContent = "Incorrect. Try again.";
+        result.style.color = "red";
+      }
+    }
+  </script>
+</body>
+</html>
