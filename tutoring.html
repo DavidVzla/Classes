@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tutor Class Companion</title>
+    <title>Tutor Companion - Full Calendar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.3.0/luxon.min.js"></script>
     <style>
@@ -11,110 +11,177 @@
             background: linear-gradient(135deg, #f6f8f9 0%, #e5ebee 100%);
             font-family: 'Inter', sans-serif;
         }
-        .card-shadow {
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-6">
-    <div class="w-full max-w-5xl bg-white rounded-2xl card-shadow overflow-hidden grid md:grid-cols-3">
-        <!-- Sidebar with Aesthetic Background -->
-        <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-8 text-white md:col-span-1 flex flex-col justify-between">
-            <div>
-                <h1 class="text-3xl font-bold mb-4">Tutor Companion</h1>
-                <p class="text-sm opacity-80 mb-6">Organize your classes, manage schedules, and stay connected with students.</p>
+    <div class="w-full max-w-6xl bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div class="grid md:grid-cols-4">
+            <!-- Sidebar Navigation -->
+            <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-6 text-white md:col-span-1">
+                <h1 class="text-3xl font-bold mb-6">Tutor Calendar</h1>
+                <div class="space-y-4">
+                    <button id="addClassBtn" class="w-full bg-white/20 hover:bg-white/30 p-3 rounded-lg transition flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add New Class
+                    </button>
+                    <div class="bg-white/10 p-4 rounded-lg">
+                        <h3 class="font-semibold mb-2">Quick Stats</h3>
+                        <div class="flex justify-between text-sm">
+                            <span>Total Classes</span>
+                            <span id="totalClassesCount">0</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span>This Week</span>
+                            <span id="weekClassesCount">0</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="space-y-4">
-                <div class="bg-white/10 p-4 rounded-lg">
-                    <h3 class="font-semibold text-lg mb-2">Quick Stats</h3>
-                    <div class="flex justify-between">
-                        <span>Total Classes</span>
-                        <span id="totalClassesCount" class="font-bold">0</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>This Week</span>
-                        <span id="weekClassesCount" class="font-bold">0</span>
-                    </div>
+
+            <!-- Full Calendar Area -->
+            <div class="md:col-span-3 p-6">
+                <div id="fullCalendar" class="grid grid-cols-7 gap-2">
+                    <!-- Days of Week Headers -->
+                    <div class="text-center font-bold text-gray-600">Mon</div>
+                    <div class="text-center font-bold text-gray-600">Tue</div>
+                    <div class="text-center font-bold text-gray-600">Wed</div>
+                    <div class="text-center font-bold text-gray-600">Thu</div>
+                    <div class="text-center font-bold text-gray-600">Fri</div>
+                    <div class="text-center font-bold text-gray-600">Sat</div>
+                    <div class="text-center font-bold text-gray-600">Sun</div>
+
+                    <!-- Calendar Days - Dynamically Populated -->
+                    <!-- Each day cell will be generated dynamically -->
                 </div>
             </div>
         </div>
 
-        <!-- Main Content Area -->
-        <div class="p-8 md:col-span-2 bg-gray-50">
-            <div class="mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Add New Class</h2>
-                <form id="classForm" class="grid md:grid-cols-2 gap-4">
-                    <input type="text" placeholder="Class Name" 
-                        class="p-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 transition">
-                    <select 
-                        class="p-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 transition">
+        <!-- Modal for Adding Class -->
+        <div id="addClassModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+            <div class="bg-white p-8 rounded-lg w-96">
+                <h2 class="text-2xl font-bold mb-4">Add New Class</h2>
+                <form id="classForm" class="space-y-4">
+                    <input type="text" placeholder="Class Name" class="w-full p-2 border rounded">
+                    <select class="w-full p-2 border rounded">
                         <option>Select Day</option>
                         <option>Monday</option>
                         <option>Tuesday</option>
-                        <!-- More days -->
+                        <option>Wednesday</option>
+                        <option>Thursday</option>
+                        <option>Friday</option>
+                        <option>Saturday</option>
+                        <option>Sunday</option>
                     </select>
-                    <input type="time" 
-                        class="p-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 transition">
-                    <input type="text" placeholder="Location" 
-                        class="p-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 transition">
-                    <button type="submit" 
-                        class="md:col-span-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-3 rounded-lg hover:opacity-90 transition">
-                        Add Class
-                    </button>
-                </form>
-            </div>
-
-            <div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Upcoming Classes</h2>
-                <div id="classSchedule" class="space-y-4">
-                    <!-- Class items will be dynamically added here -->
-                    <div class="bg-white p-4 rounded-lg flex justify-between items-center card-shadow">
-                        <div>
-                            <h3 class="font-bold text-lg">Math Tutoring</h3>
-                            <p class="text-gray-500">Monday, 4:00 PM | Central Library</p>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <button class="text-green-500 hover:bg-green-50 p-2 rounded-full">
-                                ✓
-                            </button>
-                            <button class="text-red-500 hover:bg-red-50 p-2 rounded-full">
-                                ✗
-                            </button>
-                        </div>
+                    <input type="time" class="w-full p-2 border rounded">
+                    <input type="text" placeholder="Location" class="w-full p-2 border rounded">
+                    <div class="flex justify-between">
+                        <button type="submit" class="bg-indigo-500 text-white p-2 rounded">Save</button>
+                        <button type="button" id="cancelClassBtn" class="bg-gray-200 p-2 rounded">Cancel</button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 
     <script>
-        // Enhanced Class Management Logic
-        class TutorCompanion {
-            constructor() {
-                this.classes = [];
-                this.initializeEventListeners();
-            }
-
-            initializeEventListeners() {
-                const classForm = document.getElementById('classForm');
-                classForm.addEventListener('submit', this.addClass.bind(this));
-            }
-
-            addClass(event) {
-                event.preventDefault();
-                // Implement class addition logic
-                this.updateClassStats();
-            }
-
-            updateClassStats() {
-                const totalClasses = document.getElementById('totalClassesCount');
-                const weekClasses = document.getElementById('weekClassesCount');
-                // Update logic here
-            }
+    class TutorCalendar {
+        constructor() {
+            this.classes = JSON.parse(localStorage.getItem('tutorClasses')) || [];
+            this.initializeCalendar();
+            this.bindEvents();
         }
 
-        // Initialize the application
-        new TutorCompanion();
+        initializeCalendar() {
+            const calendar = document.getElementById('fullCalendar');
+            const currentDate = new Date();
+            const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+
+            // Fill previous month's dates
+            for (let i = 0; i < firstDayOfMonth.getDay(); i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.classList.add('text-gray-300');
+                calendar.appendChild(emptyCell);
+            }
+
+            // Fill current month's dates
+            for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
+                const dayCell = document.createElement('div');
+                dayCell.classList.add('border', 'p-2', 'text-center', 'rounded');
+                dayCell.textContent = day;
+
+                // Highlight today's date
+                if (day === currentDate.getDate()) {
+                    dayCell.classList.add('bg-indigo-100');
+                }
+
+                // Mark days with classes
+                const classesOnDay = this.classes.filter(cls => 
+                    new Date(cls.date).getDate() === day
+                );
+                if (classesOnDay.length > 0) {
+                    dayCell.classList.add('bg-green-100');
+                    const classCountBadge = document.createElement('span');
+                    classCountBadge.textContent = classesOnDay.length;
+                    classCountBadge.classList.add('text-xs', 'bg-green-500', 'text-white', 'rounded-full', 'px-2');
+                    dayCell.appendChild(classCountBadge);
+                }
+
+                calendar.appendChild(dayCell);
+            }
+
+            // Update class count statistics
+            document.getElementById('totalClassesCount').textContent = this.classes.length;
+            document.getElementById('weekClassesCount').textContent = 
+                this.classes.filter(cls => this.isInCurrentWeek(new Date(cls.date))).length;
+        }
+
+        bindEvents() {
+            document.getElementById('addClassBtn').addEventListener('click', () => {
+                document.getElementById('addClassModal').classList.remove('hidden');
+            });
+
+            document.getElementById('cancelClassBtn').addEventListener('click', () => {
+                document.getElementById('addClassModal').classList.add('hidden');
+            });
+
+            document.getElementById('classForm').addEventListener('submit', this.addClass.bind(this));
+        }
+
+        addClass(event) {
+            event.preventDefault();
+            const form = event.target;
+            const newClass = {
+                name: form[0].value,
+                day: form[1].value,
+                time: form[2].value,
+                location: form[3].value,
+                date: new Date()
+            };
+
+            this.classes.push(newClass);
+            localStorage.setItem('tutorClasses', JSON.stringify(this.classes));
+            
+            // Reset and hide modal
+            form.reset();
+            document.getElementById('addClassModal').classList.add('hidden');
+
+            // Refresh calendar
+            this.initializeCalendar();
+        }
+
+        isInCurrentWeek(date) {
+            const today = new Date();
+            const firstDayOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+            const lastDayOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+            return date >= firstDayOfWeek && date <= lastDayOfWeek;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => new TutorCalendar());
     </script>
 </body>
 </html>
