@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tutor Class Companion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.3.0/luxon.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f6f8f9 0%, #e5ebee 100%);
+            font-family: 'Inter', sans-serif;
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6">
+    <div class="w-full max-w-5xl bg-white rounded-2xl card-shadow overflow-hidden grid md:grid-cols-3">
+        <!-- Sidebar with Aesthetic Background -->
+        <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-8 text-white md:col-span-1 flex flex-col justify-between">
+            <div>
+                <h1 class="text-3xl font-bold mb-4">Tutor Companion</h1>
+                <p class="text-sm opacity-80 mb-6">Organize your classes, manage schedules, and stay connected with students.</p>
+            </div>
+            <div class="space-y-4">
+                <div class="bg-white/10 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-2">Quick Stats</h3>
+                    <div class="flex justify-between">
+                        <span>Total Classes</span>
+                        <span id="totalClassesCount" class="font-bold">0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>This Week</span>
+                        <span id="weekClassesCount" class="font-bold">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="p-8 md:col-span-2 bg-gray-50">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Add New Class</h2>
+                <form id="classForm" class="grid md:grid-cols-2 gap-4">
+                    <input type="text" placeholder="Class Name" 
+                        class="p-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 transition">
+                    <select 
+                        class="p-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 transition">
+                        <option>Select Day</option>
+                        <option>Monday</option>
+                        <option>Tuesday</option>
+                        <!-- More days -->
+                    </select>
+                    <input type="time" 
+                        class="p-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 transition">
+                    <input type="text" placeholder="Location" 
+                        class="p-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 transition">
+                    <button type="submit" 
+                        class="md:col-span-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-3 rounded-lg hover:opacity-90 transition">
+                        Add Class
+                    </button>
+                </form>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Upcoming Classes</h2>
+                <div id="classSchedule" class="space-y-4">
+                    <!-- Class items will be dynamically added here -->
+                    <div class="bg-white p-4 rounded-lg flex justify-between items-center card-shadow">
+                        <div>
+                            <h3 class="font-bold text-lg">Math Tutoring</h3>
+                            <p class="text-gray-500">Monday, 4:00 PM | Central Library</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button class="text-green-500 hover:bg-green-50 p-2 rounded-full">
+                                ✓
+                            </button>
+                            <button class="text-red-500 hover:bg-red-50 p-2 rounded-full">
+                                ✗
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced Class Management Logic
+        class TutorCompanion {
+            constructor() {
+                this.classes = [];
+                this.initializeEventListeners();
+            }
+
+            initializeEventListeners() {
+                const classForm = document.getElementById('classForm');
+                classForm.addEventListener('submit', this.addClass.bind(this));
+            }
+
+            addClass(event) {
+                event.preventDefault();
+                // Implement class addition logic
+                this.updateClassStats();
+            }
+
+            updateClassStats() {
+                const totalClasses = document.getElementById('totalClassesCount');
+                const weekClasses = document.getElementById('weekClassesCount');
+                // Update logic here
+            }
+        }
+
+        // Initialize the application
+        new TutorCompanion();
+    </script>
+</body>
+</html>
